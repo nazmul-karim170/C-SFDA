@@ -20,8 +20,8 @@ The text files should be in the proper folder, expercially validation_list.txt f
 	
 	
 # Download the source model 
-For Downloading the source models trained on VISDA-C and DomainNet from here [Link](https://drive.google.com/drive/folders/16vTNNzzAt4M1mmeLsOxSFDRzBogaNkJw)
-Use the "2022" version. For VISDA-C, 2021 also works. 
+For Downloading the source models trained on VISDA-C and DomainNet from here [Link]
+Use the "2022" version. 
 	 
 # Run Commands
 	
