@@ -19,8 +19,10 @@ The text files should be in the proper folder, expercially validation_list.txt f
 	
 	
 # Download the source model 
-For Downloading the source models trained on VISDA-C from here [Link](https://drive.google.com/drive/folders/1Uf4jCsGX0WcC8aHstdEG7FvCR6DBSufk?usp=sharing)
-	 
+1. For Downloading the source models trained on VISDA-C from here [Link](https://drive.google.com/drive/folders/1Uf4jCsGX0WcC8aHstdEG7FvCR6DBSufk?usp=sharing)
+
+2. Put them in the "checkpoint" folder. 
+
 # Run Commands
 	
 1. For VISDA-C dataset, for adapting a model from "train" to "val"
@@ -28,5 +30,5 @@ For Downloading the source models trained on VISDA-C from here [Link](https://dr
  		export CUDA_VISIBLE_DEVICES=0,1,2,3
 		bash train_target_VisDA.sh 
 		
-	
+2. To check on our proposed algorithm, please go to "target_visda.py" and check "trai_csfda" function.
 Note: 1. If the simulation ends without any error, set HYDRA_FULL_ERROR=1
