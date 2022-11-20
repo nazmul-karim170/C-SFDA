@@ -10,9 +10,6 @@ GPU Usage: 2 NVIDIA RTX A40 GPUs
 	pip3 install torch==1.8.1+cu111 torchvision==0.9.1+cu111 -f https://download.pytorch.org/whl/torch_stable.html
 	pip install hydra-core numpy omegaconf sklearn tqdm wandb
 
-# For Semantic Segmentation
-
-	conda env create -f environment.yml
 		
 # Download the dataset: VISDA-C
 
