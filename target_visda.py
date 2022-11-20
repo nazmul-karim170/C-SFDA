@@ -510,7 +510,8 @@ def train_csfda(train_loader, val_loader, model, optimizer, args):
             np.savez("training_stats.npz", pseudo_label_acc = accuracies, acc_class= acc_classes, conf = conf_thress.cpu().numpy(), unc = uncertainty_thresholds.cpu().numpy(), labeled_loss_coeff = loss_coefs.cpu().numpy(), con_coeff = con_coeffs, ce_loss = loss_classes.cpu().numpy(), con_loss = con_losses.cpu().numpy(), prop_loss = unsupervised_losses.cpu().numpy(), sel_Samples = sel_Samples , unsel_samples = unsel_samples)
             ind += 1 
 
-        _,_, acc_per_class = eval_and_label_dataset(val_loader, model, banks, args)
+            ## Evaluate the model ##
+        acc_per_class = eval_and_label_dataset(val_loader, model, args)
         model.train()
         acc_classes.append(acc_per_class.mean())        
 
