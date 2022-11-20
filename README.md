@@ -33,3 +33,4 @@ The text files should be in the proper folder, expercially validation_list.txt f
 # To check on our proposed algorithm, please go to "target_visda.py" and check "train_csfda" function.
 
 Note: 1. If the simulation ends without any error, set HYDRA_FULL_ERROR=1
+

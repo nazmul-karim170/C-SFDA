@@ -1,0 +1,14 @@
+data_root: "data/"
+# data_root: "data/DomainNet/"
+# dataset: "domainnet-126"
+dataset: "VISDA-C"
+train_ratio: 0.9            ## Ratio of training data used in source training
+source_domains:
+  - "real"
+target_domains:
+  - "sketch"
+pl_list: null               ## Cached initial pseudo labels to save time
+aug_type: "moco-v2"         ## Used in TTA contrastive learning
+
+batch_size: 128             ## Batch size should be expressed as ""2^n"". Other wise it freezes. For DomainNet, USe large batch size. 
+workers: 8
