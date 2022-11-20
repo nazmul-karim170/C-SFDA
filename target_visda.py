@@ -293,7 +293,6 @@ def train_csfda(train_loader, val_loader, model, optimizer, args):
     zero_tensor = torch.tensor([0.0]).to("cuda")
     loss_coef   = 1
     con_coeff   = 0.5
-    Calibration_loss      = ECELoss()
     contrastive_criterion = SupConLoss()
     L2loss                = torch.nn.MSELoss()
     
@@ -438,7 +437,7 @@ def train_csfda(train_loader, val_loader, model, optimizer, args):
 
             except:
                 print("Oh No!!!, There is no confident samples::", ind_keep.numel(), ind_remove.numel())
-                loss_cls , accuracy_psd = classification_loss_1(
+                loss_cls , accuracy_psd = propagation_loss(
                     torch.squeeze(outputs_ema), torch.squeeze(logits_q), torch.squeeze(pseudo_labels_w), torch.squeeze(outputs_ema), args
                 )       
 
@@ -451,7 +450,7 @@ def train_csfda(train_loader, val_loader, model, optimizer, args):
             accuracies.append(accuracy_tot/total_acc)
 
 
-                ### Contrastive Learning ### (Gradually move into Momentum Contrastive Learning)
+                ### Contrastive Learning ### 
             feats_k  = model(images_k, cls_only=True)[0]                                  
             f1       = F.normalize(torch.squeeze(feats_con[ind_remove]), dim=1)
             f2       = F.normalize(torch.squeeze(feats_k[ind_remove]), dim=1)
@@ -462,20 +461,20 @@ def train_csfda(train_loader, val_loader, model, optimizer, args):
                 ### Propagation Loss ###
             ## If the clean selected set is empty, calculate loss for all samples  
             try:
-                loss_cls_rem , accuracy_psd_meter = classification_loss_1(
+                loss_cls_rem , accuracy_psd_meter = propagation_loss(
                     torch.squeeze(outputs_ema[ind_remove]), torch.squeeze(logits_q[ind_remove]), torch.squeeze(pseudo_labels_w[ind_remove]), torch.squeeze(outputs_ema[ind_remove]), args
                 )
             except:
                 loss_cls_rem = 0
 
-            _ , accuracy_psd_meter = classification_loss_1(
+            _ , accuracy_psd_meter = propagation_loss(
                 torch.squeeze(outputs_ema), torch.squeeze(logits_q), torch.squeeze(pseudo_labels_w), torch.squeeze(outputs_ema), args
             )        
             top1_psd.update(accuracy_psd_meter.item(), len(outputs_ema))
 
                    ## Loss Coefficients ###
             difficulty_score = uncer_th/conf_th
-            loss_coef *= (1- 0.0025* torch.exp(-1/difficulty_score))
+            loss_coef *= (1- 0.001* torch.exp(-1/difficulty_score))
             con_coeff *=  np.exp(-0.0001)
 
             ## At the beginning, we want to learn from more confident samples
@@ -516,85 +515,6 @@ def train_csfda(train_loader, val_loader, model, optimizer, args):
         acc_classes.append(acc_per_class.mean())        
 
 
-class ECELoss(nn.Module):
-    """
-    Calculates the Expected Calibration Error of a model.
-    (This isn't necessary for temperature scaling, just a cool metric).
-    The input to this loss is the logits of a model, NOT the softmax scores.
-    This divides the confidence outputs into equally-sized interval bins.
-    In each bin, we compute the confidence gap:
-    bin_gap = | avg_confidence_in_bin - accuracy_in_bin |
-    We then return a weighted average of the gaps, based on the number
-    of samples in each bin
-    See: Naeini, Mahdi Pakdaman, Gregory F. Cooper, and Milos Hauskrecht.
-    "Obtaining Well Calibrated Probabilities Using Bayesian Binning." AAAI.
-    2015.
-    """
-    def __init__(self, n_bins=20):
-        """
-        n_bins (int): number of confidence interval bins
-        """
-        super(ECELoss, self).__init__()
-        bin_boundaries = torch.linspace(0, 1, n_bins + 1)
-        self.bin_lowers = bin_boundaries[:-1]
-        self.bin_uppers = bin_boundaries[1:]
-
-    def forward(self, logits, labels):
-        softmaxes = F.softmax(logits, dim=1)
-        confidences, predictions = torch.max(softmaxes, 1)
-        accuracies = predictions.eq(labels)
-
-        ece = torch.zeros(1, device=logits.device)
-        for bin_lower, bin_upper in zip(self.bin_lowers, self.bin_uppers):
-            # Calculated |confidence - accuracy| in each bin
-            in_bin = confidences.gt(bin_lower.item()) * confidences.le(bin_upper.item())
-            prop_in_bin = in_bin.float().mean()
-            if prop_in_bin.item() > 0:
-                accuracy_in_bin = accuracies[in_bin].float().mean()
-                avg_confidence_in_bin = confidences[in_bin].mean()
-                ece += torch.abs(avg_confidence_in_bin - accuracy_in_bin) * prop_in_bin
-
-        return ece
-
-
-def CB_loss(labels, logits, samples_per_cls, no_of_classes, loss_type='softmax', beta=0.9999, gamma=2):
-    """Compute the Class Balanced Loss between `logits` and the ground truth `labels`.
-    Class Balanced Loss: ((1-beta)/(1-beta^n))*Loss(labels, logits)
-    where Loss is one of the standard losses used for Neural Networks.
-    Args:
-      labels: A int tensor of size [batch].
-      logits: A float tensor of size [batch, no_of_classes].
-      samples_per_cls: A python list of size [no_of_classes].
-      no_of_classes: total number of classes. int
-      loss_type: string. One of "sigmoid", "focal", "softmax".
-      beta: float. Hyperparameter for Class balanced loss.
-      gamma: float. Hyperparameter for Focal loss.
-    Returns:
-      cb_loss: A float tensor representing class balanced loss
-    """
-
-    effective_num = 1.0 - np.power(beta, samples_per_cls.cpu().numpy())
-    weights = (1.0 - beta) / np.array(effective_num)
-    weights = weights / np.sum(weights) * no_of_classes
-
-    labels_one_hot = F.one_hot(labels, no_of_classes).float()
-
-    weights = torch.tensor(weights).float()
-    weights = weights.unsqueeze(0)
-    weights = weights.cuda()
-    weights = weights.repeat(labels_one_hot.shape[0],1) * labels_one_hot
-    weights = weights.sum(1)
-    weights = weights.unsqueeze(1)
-    weights = weights.repeat(1,no_of_classes)
-
-    if loss_type == "focal":
-        cb_loss = focal_loss(labels_one_hot, logits, weights, gamma)
-    elif loss_type == "sigmoid":
-        cb_loss = F.binary_cross_entropy_with_logits(input = logits,target = labels_one_hot, weights = weights)
-    elif loss_type == "softmax":
-        pred = logits.softmax(dim = 1)
-        cb_loss = F.binary_cross_entropy(input = pred, target = labels_one_hot, weight = weights)
-    return cb_loss
 
 
 @torch.jit.script
@@ -607,24 +527,6 @@ def calculate_acc(logits, labels):
     preds = logits.argmax(dim=1)
     accuracy = (preds == labels).float().mean() * 100
     return accuracy
-
-
-## Contrastive loss (Modify It)
-def instance_loss(logits_ins, pseudo_labels, mem_labels, contrast_type):
-
-    # labels: positive key indicators
-    labels_ins = torch.zeros(logits_ins.shape[0], dtype=torch.long).cuda()
-
-    # in class_aware mode, do not contrast with same-class samples
-    if contrast_type == "class_aware" and pseudo_labels is not None:
-        mask = torch.ones_like(logits_ins, dtype=torch.bool)
-        mask[:, 1:] = pseudo_labels.reshape(-1, 1) != mem_labels  # (B, K)
-        logits_ins = torch.where(mask, logits_ins, torch.tensor([float("-inf")]).cuda())
-
-    loss = F.cross_entropy(logits_ins, labels_ins)
-    accuracy = calculate_acc(logits_ins, labels_ins)
-
-    return loss, accuracy
 
 
 def classification_loss(outputs_ema, logits_s, target_labels, targets_preds, args, class_weights= None):
@@ -641,7 +543,7 @@ def classification_loss(outputs_ema, logits_s, target_labels, targets_preds, arg
         )
     return loss_cls, accuracy
 
-def classification_loss_1(outputs_ema, logits_s, target_labels, targets_preds, args):
+def propagation_loss(outputs_ema, logits_s, target_labels, targets_preds, args):
     if args.learn.ce_sup_type == "weak_weak":
         loss_cls = cross_entropy_loss(outputs_ema, target_labels, args)
         accuracy = calculate_acc(outputs_ema, target_labels)
@@ -655,24 +557,6 @@ def classification_loss_1(outputs_ema, logits_s, target_labels, targets_preds, a
         )
     return loss_cls, accuracy
 
-def div(logits, epsilon=1e-8):
-
-    probs = F.softmax(logits, dim=1)
-    probs_mean = probs.mean(dim=0)
-    loss_div = -torch.sum(-probs_mean * torch.log(probs_mean + epsilon))
-
-    return loss_div
-
-
-def diversification_loss(outputs_ema, logits_s, args):
-    if args.learn.ce_sup_type == "weak_weak":
-        loss_div = div(outputs_ema)
-    elif args.learn.ce_sup_type == "weak_strong":
-        loss_div = div(logits_s)
-    else:
-        loss_div = div(outputs_ema) + div(logits_s)
-
-    return loss_div
 
 
 def smoothed_cross_entropy(logits, labels, num_classes, epsilon=0):
