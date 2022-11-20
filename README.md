@@ -30,5 +30,6 @@ The text files should be in the proper folder, expercially validation_list.txt f
  		export CUDA_VISIBLE_DEVICES=0,1,2,3
 		bash train_target_VisDA.sh 
 		
-2. To check on our proposed algorithm, please go to "target_visda.py" and check "trai_csfda" function.
+# To check on our proposed algorithm, please go to "target_visda.py" and check "train_csfda" function.
+
 Note: 1. If the simulation ends without any error, set HYDRA_FULL_ERROR=1
