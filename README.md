@@ -15,7 +15,8 @@ GPU Usage: 2 NVIDIA RTX A40 GPUs
 
 1. For VISDA-C, go to this link [Link](https://github.com/VisionLearningGroup/taskcv-2017-public/tree/master/classification) and download the train.tar, validation.tar and test.tar
 
-The text files should be in the proper folder, expercially validation_list.txt file.
+Put these downloaded files into "data/VISDA-C/" folder.
+The text files should be in the proper folder, expercially validation_list.txt file. 
 	
 	
 # Download the source model 
