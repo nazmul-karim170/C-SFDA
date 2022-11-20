@@ -22,7 +22,7 @@ The text files should be in the proper folder, expercially validation_list.txt f
 	
 	
 # Download the source model 
-For Downloading the source models trained on VISDA-C and DomainNet from here [Link](https://drive.google.com/drive/folders/1Uf4jCsGX0WcC8aHstdEG7FvCR6DBSufk?usp=sharing)
+For Downloading the source models trained on VISDA-C from here [Link](https://drive.google.com/drive/folders/1Uf4jCsGX0WcC8aHstdEG7FvCR6DBSufk?usp=sharing)
 	 
 # Run Commands
 	
