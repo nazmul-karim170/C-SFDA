@@ -1,5 +1,4 @@
-# SFDA
-## Readme for Reproducibility
+## For Reproducibility
 
 GPU Usage: 2 NVIDIA RTX A40 GPUs
 
@@ -11,6 +10,9 @@ GPU Usage: 2 NVIDIA RTX A40 GPUs
 	pip3 install torch==1.8.1+cu111 torchvision==0.9.1+cu111 -f https://download.pytorch.org/whl/torch_stable.html
 	pip install hydra-core numpy omegaconf sklearn tqdm wandb
 
+# For Semantic Segmentation
+
+	conda env create -f environment.yml
 		
 # Download the dataset: VISDA-C
 
@@ -20,15 +22,14 @@ The text files should be in the proper folder, expercially validation_list.txt f
 	
 	
 # Download the source model 
-For Downloading the source models trained on VISDA-C and DomainNet from here [Link]
-Use the "2022" version. 
+For Downloading the source models trained on VISDA-C and DomainNet from here [Link](https://drive.google.com/drive/folders/1Uf4jCsGX0WcC8aHstdEG7FvCR6DBSufk?usp=sharing)
 	 
 # Run Commands
 	
 1. For VISDA-C dataset, for adapting a model from "train" to "val"
  
  		export CUDA_VISIBLE_DEVICES=0,1,2,3
-		bash train_VISDA-C_target.sh 
+		bash train_target_VisDA.sh 
 		
 	
 Note: 1. If the simulation ends without any error, set HYDRA_FULL_ERROR=1
