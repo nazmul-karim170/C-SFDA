@@ -21,7 +21,7 @@ from Contrastive_loss import *
 import matplotlib.pyplot as plt
 import torchvision.utils as utils
 
-from utils_visda import (
+from utils_csfda import (
     adjust_learning_rate,
     concat_all_gather,
     get_augmentation,
