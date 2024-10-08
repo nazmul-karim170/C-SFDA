@@ -99,8 +99,28 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3
 bash train_target_DomainNet.sh <SOURCE_DOMAIN> <TARGET_DOMAIN> <SRC_MODEL_DIR>
 ```
 
-## For Office-Home
+## For Office-Home and Office-31
 
+- We follow SHOT Paper implementation for these 2 datasets
+
+- Check the "Office" Folder
+
+- Please manually download the datasets [Office](https://drive.google.com/file/d/0B4IapRTv9pJ1WGZVd1VDMmhwdlE/view), [Office-Home](https://drive.google.com/file/d/0B81rNlvomiwed0V1YUxQdC1uOTg/view)
+
+- To train the source models
+
+```bash
+export CUDA_VISIBLE_DEVICES=0,1,2,3
+bash office-home_source.sh
+```
+
+- For Adaptation
+
+```bash
+export CUDA_VISIBLE_DEVICES=0,1,2,3
+bash office_home_target.sh
+```
+  
 
 ### Note
 If the simulation ends without any error, set HYDRA_FULL_ERROR=1
