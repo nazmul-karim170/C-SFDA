@@ -43,7 +43,7 @@ ${DATA_ROOT}
 ### **Training**
 We use [hydra](https://github.com/facebookresearch/hydra) as the configuration system. By default, the working directory is `./output`, which can be changed directly from `configs/root.yaml` or via hydra command line interface `workdir=${WORK_DIR}`.
 
-VISDA-C experiments are done for `train` to `validation` adaptation. Before the test-time adaptation, we should have the source model. You may train the source model with script `train_source_VisDA.sh` as shown below.
+VISDA-C experiments are done for `train` to `validation` adaptation. Before the adaptation, we should have the source model. You may train the source model with script `train_source_VisDA.sh` as shown below.
 
 ```bash
 export CUDA_VISIBLE_DEVICES=0,1,2,3
@@ -51,6 +51,8 @@ bash train_source_VisDA.sh
 ```
 
 We also provide the pre-trained source models from 3 seeds (2020, 2021, 2022) which can be [downloaded from here](https://drive.google.com/drive/folders/16vTNNzzAt4M1mmeLsOxSFDRzBogaNkJw?usp=sharing).
+
+To adapt the model, do the following-  
 
 ```bash
 export CUDA_VISIBLE_DEVICES=0,1,2,3
