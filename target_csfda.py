@@ -217,9 +217,6 @@ def train_target_domain(args):
     )
     logging.info("2 - Computed initial pseudo labels")
 
-    # banks= None
-    # pseudo_item_list = []
-
     ### Training data  (Is it domain by domain, look for online settings!)
     train_transform = get_augmentation_versions(args)
     train_dataset = ImageList(
@@ -436,7 +433,6 @@ def train_csfda(train_loader, val_loader, model, optimizer, args):
                 )
 
             except:
-                print("Oh No!!!, There is no confident samples::", ind_keep.numel(), ind_remove.numel())
                 loss_cls , accuracy_psd = propagation_loss(
                     torch.squeeze(outputs_ema), torch.squeeze(logits_q), torch.squeeze(pseudo_labels_w), torch.squeeze(outputs_ema), args
                 )       
