@@ -83,7 +83,7 @@ ${DATA_ROOT}
 ### **Training**
 We use [hydra](https://github.com/facebookresearch/hydra) as the configuration system. By default, the working directory is `./output`, which can be changed directly from `configs/root.yaml` or via hydra command line interface `workdir=${WORK_DIR}`.
 
-DomainNet-126 experiments are done for 7 domain shifts constructed from combinations of `Real`, `Sketch`, `Clipart`, and `Painting`. Before the adaptation, we should have the source model. You may train the source model with script `train_source_domainnet.sh` as shown below. 
+DomainNet-126 experiments are done for 7 domain shifts constructed from combinations of `Real`, `Sketch`, `Clipart`, and `Painting`. Before the adaptation, we should have the source model. You may train the source model with script `train_source_DomainNet.sh` as shown below. 
 
 ```bash
 export CUDA_VISIBLE_DEVICES=0,1,2,3
