@@ -23,7 +23,7 @@ Source Free Domain Adaptation</a></h2>
 	pip install hydra-core numpy omegaconf sklearn tqdm wandb
 
 		
-## For Training on VisDA-C
+## For VisDA-C
 
 ### **Prepare dataset**
 
@@ -52,12 +52,55 @@ bash train_source_VisDA.sh
 
 We also provide the pre-trained source models from 3 seeds (2020, 2021, 2022) which can be [downloaded from here](https://drive.google.com/drive/folders/16vTNNzzAt4M1mmeLsOxSFDRzBogaNkJw?usp=sharing).
 
-To adapt the model, do the following-  
+After obtaining the source models, put them under `${SRC_MODEL_DIR}` and run
 
 ```bash
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 bash train_target_VisDA.sh 
 ```
+
+## For DomainNet-126
+
+### **Prepare dataset**
+
+Please download the [DomainNet dataset (cleaned version)](http://ai.bu.edu/M3SDA/), and put it under `${DATA_ROOT}`. Notice that we follow [MME](https://arxiv.org/abs/1904.06487) to use a subset that contains 126 classes from 4 domains, so we also compiled `.txt` files for your convenience based on the the image labels, provided under `./data/domainnet-126/`. The prepared directory would look like:
+
+```bash
+${DATA_ROOT}
+├── domainnet-126
+│   ├── real
+│   ├── sketch
+│   ├── clipart
+│   ├── painting
+│   ├── real_list.txt
+│   ├── sketch_list.txt
+│   ├── clipart_list.txt
+│   ├── painting_list.txt
+```
+
+`${DATA_ROOT}` is set to `./data/` by default, which can be modified in `configs/data/basic.yaml` or via hydra command line interface `data.data_root=${DATA_ROOT}`.
+
+### **Training**
+We use [hydra](https://github.com/facebookresearch/hydra) as the configuration system. By default, the working directory is `./output`, which can be changed directly from `configs/root.yaml` or via hydra command line interface `workdir=${WORK_DIR}`.
+
+DomainNet-126 experiments are done for 7 domain shifts constructed from combinations of `Real`, `Sketch`, `Clipart`, and `Painting`. Before the adaptation, we should have the source model. You may train the source model with script `train_source_domainnet.sh` as shown below. 
+
+```bash
+export CUDA_VISIBLE_DEVICES=0,1,2,3
+bash train_source_DomainNet.sh <SOURCE_DOMAIN>
+```
+
+We also provide the pre-trained source models from 3 seeds (2020, 2021, 2022) which can be [downloaded from here](https://drive.google.com/drive/folders/16vTNNzzAt4M1mmeLsOxSFDRzBogaNkJw?usp=sharing).
+
+After obtaining the source models, put them under `${SRC_MODEL_DIR}` and run 
+
+```bash
+export CUDA_VISIBLE_DEVICES=0,1,2,3
+bash train_target_DomainNet.sh <SOURCE_DOMAIN> <TARGET_DOMAIN> <SRC_MODEL_DIR>
+```
+
+## For Office-Home
+
 
 ### Note
 If the simulation ends without any error, set HYDRA_FULL_ERROR=1
