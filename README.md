@@ -27,7 +27,7 @@ Source Free Domain Adaptation</a></h2>
 
 ### **Prepare dataset**
 
-Please download the [VisDA-C dataset](https://github.com/VisionLearningGroup/taskcv-2017-public/tree/master/classification), and put it under `${DATA_ROOT}`. For your convenience we also compiled `.txt` files based on the the image labels, provided under `./datasets/VISDA-C/`. The prepared directory would look like:
+Please download the [VisDA-C dataset](https://github.com/VisionLearningGroup/taskcv-2017-public/tree/master/classification), and put it under `${DATA_ROOT}`. For your convenience we also compiled `.txt` files based on the the image labels, provided under `./data/VISDA-C/`. The prepared directory would look like:
 
 ```bash
 ${DATA_ROOT}
@@ -38,7 +38,7 @@ ${DATA_ROOT}
 │   ├── validation_list.txt
 ```
 
-`${DATA_ROOT}` is set to `./datasets/` by default, which can be modified in `configs/data/basic.yaml` or via hydra command line interface `data.data_root=${DATA_ROOT}`.
+`${DATA_ROOT}` is set to `./data/` by default, which can be modified in `configs/data/basic.yaml` or via hydra command line interface `data.data_root=${DATA_ROOT}`.
 
 ### **Training**
 We use [hydra](https://github.com/facebookresearch/hydra) as the configuration system. By default, the working directory is `./output`, which can be changed directly from `configs/root.yaml` or via hydra command line interface `workdir=${WORK_DIR}`.
