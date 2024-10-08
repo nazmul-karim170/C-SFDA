@@ -17,7 +17,7 @@ import torch.multiprocessing as mp
 import wandb
 
 from source import train_source_domain
-from target_visda import train_target_domain as train_target_csfda
+from target_csfda import train_target_domain as train_target_csfda
 from utils import configure_logger, NUM_CLASSES, use_wandb
 
 
