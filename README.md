@@ -105,9 +105,9 @@ bash train_target_DomainNet.sh <SOURCE_DOMAIN> <TARGET_DOMAIN> <SRC_MODEL_DIR>
 
 - Check the "Office" Folder
 
-  ```bash
-  cd Office
-  ```
+```bash
+cd Office
+```
 
 - Please manually download the datasets [Office](https://drive.google.com/file/d/0B4IapRTv9pJ1WGZVd1VDMmhwdlE/view), [Office-Home](https://drive.google.com/file/d/0B81rNlvomiwed0V1YUxQdC1uOTg/view)
 
