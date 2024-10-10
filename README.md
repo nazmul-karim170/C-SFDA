@@ -101,9 +101,13 @@ bash train_target_DomainNet.sh <SOURCE_DOMAIN> <TARGET_DOMAIN> <SRC_MODEL_DIR>
 
 ## For Office-Home and Office-31
 
-- We follow SHOT Paper implementation for these 2 datasets
+- We follow SHOT Paper GitHub Repo for these two datasets
 
 - Check the "Office" Folder
+
+  ```bash
+  cd Office
+  ```
 
 - Please manually download the datasets [Office](https://drive.google.com/file/d/0B4IapRTv9pJ1WGZVd1VDMmhwdlE/view), [Office-Home](https://drive.google.com/file/d/0B81rNlvomiwed0V1YUxQdC1uOTg/view)
 
