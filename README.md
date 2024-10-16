@@ -131,7 +131,7 @@ bash office_home_target.sh
 * If the simulation ends without any error, set HYDRA_FULL_ERROR=1
 GPU Usage: 2 NVIDIA RTX A40 GPUs
 
-* This repo is built on AdaContrast and SHOT GitHub repps
+* This repo is built on AdaContrast and SHOT GitHub repos
 
 ## Reference
 
