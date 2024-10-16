@@ -50,7 +50,7 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3
 bash train_source_VisDA.sh 
 ```
 
-We also provide the pre-trained source models from 3 seeds (2020, 2021, 2022) which can be [downloaded from here](https://drive.google.com/drive/folders/16vTNNzzAt4M1mmeLsOxSFDRzBogaNkJw?usp=sharing).
+We also provide the link to pre-trained source models from 3 seeds (2020, 2021, 2022) which can be [downloaded from here](https://drive.google.com/drive/folders/16vTNNzzAt4M1mmeLsOxSFDRzBogaNkJw?usp=sharing).
 
 After obtaining the source models, put them under `${SRC_MODEL_DIR}` and run
 
@@ -90,7 +90,7 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3
 bash train_source_DomainNet.sh <SOURCE_DOMAIN>
 ```
 
-We also provide the pre-trained source models from 3 seeds (2020, 2021, 2022) which can be [downloaded from here](https://drive.google.com/drive/folders/16vTNNzzAt4M1mmeLsOxSFDRzBogaNkJw?usp=sharing).
+We also provide the link to pre-trained source models from 3 seeds (2020, 2021, 2022) which can be [downloaded from here](https://drive.google.com/drive/folders/16vTNNzzAt4M1mmeLsOxSFDRzBogaNkJw?usp=sharing).
 
 After obtaining the source models, put them under `${SRC_MODEL_DIR}` and run 
 
@@ -127,8 +127,11 @@ bash office_home_target.sh
   
 
 ### Note
-If the simulation ends without any error, set HYDRA_FULL_ERROR=1
+
+* If the simulation ends without any error, set HYDRA_FULL_ERROR=1
 GPU Usage: 2 NVIDIA RTX A40 GPUs
+
+* This repo is built on AdaContrast and SHOT GitHub repps
 
 ## Reference
 
