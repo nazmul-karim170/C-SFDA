@@ -63,7 +63,7 @@ bash train_target_VisDA.sh
 
 ### **Prepare dataset**
 
-Please download the [DomainNet dataset (cleaned version)](http://ai.bu.edu/M3SDA/), and put it under `${DATA_ROOT}`. Notice that we follow [MME](https://arxiv.org/abs/1904.06487) to use a subset that contains 126 classes from 4 domains, so we also compiled `.txt` files for your convenience based on the the image labels, provided under `./data/domainnet-126/`. The prepared directory would look like:
+Please download the [DomainNet dataset (cleaned version)](http://ai.bu.edu/M3SDA/), and put it under `${DATA_ROOT}`. Notice that we follow [MME](https://arxiv.org/abs/1904.06487) to use a subset that contains 126 classes from 4 domains, so we also compiled `.txt` files for your convenience based on the the image labels, provided under `./data/DomainNet/`. The prepared directory would look like:
 
 ```bash
 ${DATA_ROOT}
